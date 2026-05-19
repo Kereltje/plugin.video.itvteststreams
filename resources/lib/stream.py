@@ -68,6 +68,34 @@ _devices = {
         }
     },
 
+    'androidtv': {
+        "client": {
+            "id": "androidtv",
+            "isp": {},
+            "supportsAdPods": False,
+            "appVersion": "3.748.0",
+            "version": "3.748.0",
+            "service": "itv.x",
+            "thirdPartyPaymentModel": "free",
+        },
+        "device": {
+            "manufacturer": "androidtv",
+            "model": "dummyModel",
+            "os": {
+                "name": "dummyModel"
+            }
+        },
+        "user": {
+            "token": "",
+            "dummyModel": None
+        },
+        "variantAvailability": {
+            "drm": {'maxSupported': 'L3', 'system': 'widevine'},
+            "featureset": ['mpeg-dash', 'widevine', 'outband-webvtt', 'hd', 'single-track'],
+            "platformTag": "ctv"
+        }
+    },
+
     'freeview': {
         "client": {
             "id": "freeview",
