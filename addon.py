@@ -31,7 +31,7 @@ def build_url(callb, **kwargs):
 
 def menu():
     log(f'Showing main menu')
-    for prgm in ({'programme': 'Secret Service', 'ur;': 'https://magni.itv.com/playlist/itvonline/ITV/10_3104_0001.001'},
+    for prgm in ({'programme': 'Secret Service', 'url': 'https://magni.itv.com/playlist/itvonline/ITV/10_3104_0001.001'},
                  {'programme': 'The Patient', 'url': 'https://magni.itv.com/playlist/itvonline/ITV/10_7483_0001.001'}):
         for device in ('linux_web', 'win_web', 'freesat', 'freeview', 'virginmedia', 'androidtv'):
             mnu_item = xbmcgui.ListItem(' - '.join((prgm['programme'], device)))
