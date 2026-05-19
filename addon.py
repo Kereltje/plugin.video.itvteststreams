@@ -55,6 +55,7 @@ def list_video(device, programme, url):
     ):
         mnu_item = xbmcgui.ListItem(name)
         mnu_item.setProperty('IsPlayable', 'true')
+        mnu_item.setIsFolder(False)
         mnu_item.setArt({'thumb': os.path.join(ADDON_PATH, 'resources/icon.png')})
 
         params.update({
@@ -71,6 +72,7 @@ def play(url, device, programme, feature_set=None, drm=None, has_ad=False):
     log(f"Playing {programme} on {device}, {feature_set}/{drm} - {url}")
     from resources.lib.stream import play_vod
     li = play_vod(url, device, feature_set, drm, has_ad)
+    li.setProperty('IsPlayable', 'true')
     xbmcplugin.setResolvedUrl(plugin_handle, True, listitem=li)
 
 
