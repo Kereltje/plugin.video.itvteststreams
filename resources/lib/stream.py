@@ -240,12 +240,12 @@ def parse_playlist(playlist):
     else:
         dash_url = video_locations['Href']
 
-    # Force display height <= 1080
-    url, qs = dash_url.rsplit('?')
     # # Force display height <= 1080
-    # qs = qs.replace('720', '1080')
-    url = url.replace('-HD-S', '-HD')
-    dash_url = '?'.join((url, qs))
+    # url, qs = dash_url.rsplit('?')
+    # # # Force display height <= 1080
+    # # qs = qs.replace('720', '1080')
+    # url = url.replace('-HD-S', '-HD')
+    # dash_url = '?'.join((url, qs))
 
     key_service = video_locations['KeyServiceUrl']
     key_service = key_service.replace('playready/rightsmanager.asmx', 'widevine/getlicense')

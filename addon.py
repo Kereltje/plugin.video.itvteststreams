@@ -31,39 +31,44 @@ def build_url(callb, **kwargs):
 
 def menu():
     log(f'Showing main menu')
-    for device in ('linux_web', 'win_web', 'freesat', 'freeview', 'virginmedia', 'androidtv'):
-        mnu_item = xbmcgui.ListItem(device)
-        mnu_item.setProperty('IsPlayable', 'true')
-        callb_url = build_url('list_video', device=device)
-        xbmcplugin.addDirectoryItem(plugin_handle, callb_url, mnu_item, True)
+    for prgm in ({'programme': 'Secret Service', 'ur;': 'https://magni.itv.com/playlist/itvonline/ITV/10_3104_0001.001'},
+                 {'programme': 'The Patient', 'url': 'https://magni.itv.com/playlist/itvonline/ITV/10_7483_0001.001'}):
+        for device in ('linux_web', 'win_web', 'freesat', 'freeview', 'virginmedia', 'androidtv'):
+            mnu_item = xbmcgui.ListItem(' - '.join((prgm['programme'], device)))
+            mnu_item.setProperty('IsPlayable', 'true')
+            callb_url = build_url('list_video', device=device, **prgm)
+            xbmcplugin.addDirectoryItem(plugin_handle, callb_url, mnu_item, True)
     xbmcplugin.setContent(plugin_handle, 'videos')
     xbmcplugin.endOfDirectory(plugin_handle)
 
 
-def list_video(device):
-    log(f'Showing video for device {device}')
-    url = 'https://magni.itv.com/playlist/itvonline/ITV/10_3104_0001.001'
+def list_video(device, programme, url):
+    log(f'Showing video for {programme} on device {device}')
     for name, callb, params in (
-        (f'Secret Service ({device}, native)', 'play', {'device': device}),
-        (f'Secret Service ({device}, pr-dvb, pr)', 'play', {'device': device, 'feature_set': 'pr_dvb'}),
-        (f'Secret Service ({device}, pr-dvb, wv)', 'play', {'device': device, 'feature_set': 'pr_dvb', 'drm': 'wv'}),
-        (f'Secret Service ({device}, pr-mpeg, pr)', 'play', {'device': device, 'feature_set': 'pr_mpeg', 'drm': 'pr'}),
-        (f'Secret Service ({device}, pr-mpeg, wv)', 'play', {'device': device, 'feature_set': 'pr_mpeg', 'drm': 'wv'}),
-        (f'Secret Service ({device}, wv-dvb, wv)', 'play', {'device': device, 'feature_set': 'wv_dvb', 'drm': 'wv'}),
-        (f'Secret Service ({device}, wv-mpeg, wv)', 'play', {'device': device, 'feature_set': 'wv_mpeg', 'drm': 'wv'})
+        (f'{programme} ({device}, native)', 'play', {'device': device}),
+        (f'{programme} ({device}, pr-dvb, pr)', 'play', {'feature_set': 'pr_dvb'}),
+        (f'{programme} ({device}, pr-dvb, wv)', 'play', {'feature_set': 'pr_dvb', 'drm': 'wv'}),
+        (f'{programme} ({device}, pr-mpeg, pr)', 'play', {'feature_set': 'pr_mpeg', 'drm': 'pr'}),
+        (f'{programme} ({device}, pr-mpeg, wv)', 'play', {'feature_set': 'pr_mpeg', 'drm': 'wv'}),
+        (f'{programme} ({device}, wv-dvb, wv)', 'play', {'feature_set': 'wv_dvb', 'drm': 'wv'}),
+        (f'{programme} ({device}, wv-mpeg, wv)', 'play', {'feature_set': 'wv_mpeg', 'drm': 'wv'})
     ):
         mnu_item = xbmcgui.ListItem(name)
         mnu_item.setProperty('IsPlayable', 'true')
         mnu_item.setArt({'thumb': os.path.join(ADDON_PATH, 'resources/icon.png')})
 
+        params.update({
+            'programme': programme,
+            'device': device
+        })
         callb_url = build_url(callb, url=url, **params)
         xbmcplugin.addDirectoryItem(plugin_handle, callb_url, mnu_item, False)
     xbmcplugin.setContent(plugin_handle, 'videos')
     xbmcplugin.endOfDirectory(plugin_handle)
 
 
-def play(url, device, feature_set=None, drm=None, has_ad=False):
-    log(f"Playing {device}, {feature_set} - {url}")
+def play(url, device, programme, feature_set=None, drm=None, has_ad=False):
+    log(f"Playing {programme} on {device}, {feature_set}/{drm} - {url}")
     from resources.lib.stream import play_vod
     li = play_vod(url, device, feature_set, drm, has_ad)
     xbmcplugin.setResolvedUrl(plugin_handle, True, listitem=li)
